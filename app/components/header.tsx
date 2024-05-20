@@ -21,23 +21,23 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
           className={({ isActive }) =>
             cn(
               "text-muted-foreground transition-colors hover:text-foreground",
-              isActive && "text-primary"
+              isActive && "text-primary",
             )
           }
         >
-          Contatos
+          Home
         </NavLink>
         {isAdmin && (
           <NavLink
-            to="/users"
+            to="/admin"
             className={({ isActive }) =>
               cn(
                 "text-muted-foreground transition-colors hover:text-foreground",
-                isActive && "text-primary"
+                isActive && "text-primary",
               )
             }
           >
-            Usuários
+            Admin
           </NavLink>
         )}
       </nav>
@@ -60,23 +60,23 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
               className={({ isActive }) =>
                 cn(
                   "text-muted-foreground hover:text-foreground",
-                  isActive && "text-primary"
+                  isActive && "text-primary",
                 )
               }
             >
-              Contatos
+              Home
             </NavLink>
             {isAdmin && (
               <NavLink
-                to="/users"
+                to="/admin"
                 className={({ isActive }) =>
                   cn(
                     "text-muted-foreground hover:text-foreground",
-                    isActive && "text-primary"
+                    isActive && "text-primary",
                   )
                 }
               >
-                Usuários
+                Admin
               </NavLink>
             )}
           </nav>
