@@ -13,7 +13,7 @@ const viteDevServer =
     : await import("vite").then((vite) =>
         vite.createServer({
           server: { middlewareMode: true },
-        })
+        }),
       );
 
 const remixHandler = createRequestHandler({
@@ -52,7 +52,7 @@ if (viteDevServer) {
   // Vite fingerprints its assets so we can cache forever.
   app.use(
     "/assets",
-    express.static("build/client/assets", { immutable: true, maxAge: "1y" })
+    express.static("build/client/assets", { immutable: true, maxAge: "1y" }),
   );
 }
 
@@ -87,7 +87,7 @@ const strongestRateLimit = rateLimit({
 const generalRateLimit = rateLimit(rateLimitDefault);
 
 app.use((req, res, next) => {
-  const strongPaths = ["/sign-in", "/logout"];
+  const strongPaths = ["/auth/sign-in", "/auth/logout"];
 
   if (
     req.method !== "GET" &&
@@ -109,5 +109,5 @@ app.all("*", remixHandler);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
-  console.log(`Express server listening at http://localhost:${port}`)
+  console.log(`Express server listening at http://localhost:${port}`),
 );
