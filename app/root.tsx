@@ -7,7 +7,7 @@ import {
   json,
   useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import stylesheet from "./tailwind.css?url";
 import { honeypot } from "./utils/honeypot.server";
 import { HoneypotProvider } from "remix-utils/honeypot/react";
@@ -24,6 +24,10 @@ import { GeneralErrorBoundary } from "./components/error-boundary";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
+
+export const meta: MetaFunction = () => [{
+  title: 'SFR App',
+}]
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { getTheme } = await themeSessionResolver(request);
