@@ -54,9 +54,9 @@ export default function SignInPage() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
+            <h1 className="text-3xl font-bold">Sign in</h1>
             <p className="text-balance text-muted-foreground">
-              Digite seu email e senha para acessar o sistema.
+              Enter your email and password.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ export default function SignInPage() {
               <FormMessage errors={fields.email.errors} />
             </FormItem>
             <FormItem>
-              <Label htmlFor={fields.password.id}>Senha</Label>
+              <Label htmlFor={fields.password.id}>Password</Label>
               <Input
                 {...getInputProps(fields.password, { type: "password" })}
               />
@@ -77,7 +77,7 @@ export default function SignInPage() {
             <input {...getInputProps(fields.redirectTo, { type: "hidden" })} />
             <Button type="submit" disabled={isPending} className="w-full">
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Entrar
+              Sign in
             </Button>
           </Form>
         </div>
@@ -101,7 +101,7 @@ export async function action({ request }: ActionFunctionArgs) {
         if (!session) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Email ou senha inválidos",
+            message: "Email or password are incorrects",
             path: ["email"],
           });
           return z.NEVER;

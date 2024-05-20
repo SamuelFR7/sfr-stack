@@ -18,6 +18,8 @@ import {
   useTheme,
 } from "remix-themes";
 import clsx from "clsx";
+import { ReactNode } from "react";
+import { GeneralErrorBoundary } from "./components/error-boundary";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -44,7 +46,7 @@ export default function AppWithProviders() {
   );
 }
 
-export function App() {
+function Document({ children }: { children: ReactNode }) {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
@@ -58,7 +60,33 @@ export function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+export function App() {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <GeneralErrorBoundary />
         <ScrollRestoration />
         <Scripts />
       </body>
