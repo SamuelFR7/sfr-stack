@@ -1,9 +1,4 @@
-# fly.toml app configuration file generated for sfr-stack on 2024-05-20T13:33:04-03:00
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'sfr-stack'
+app = 'sfr-stack-template'
 primary_region = 'gru'
 
 [build]
