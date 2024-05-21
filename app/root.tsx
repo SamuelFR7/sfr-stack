@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
   json,
+  useFetchers,
   useLoaderData,
 } from "@remix-run/react"
 import type {
@@ -15,11 +16,14 @@ import type {
 import stylesheet from "./tailwind.css?url"
 import { honeypot } from "./utils/honeypot.server"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
-import { themeSessionResolver } from "./utils/theme.server"
-import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes"
+import { getTheme } from "./utils/theme.server"
 import clsx from "clsx"
 import { ReactNode } from "react"
 import { GeneralErrorBoundary } from "./components/error-boundary"
+import { getDomainUrl } from "./utils/misc"
+import { useRequestInfo } from "./utils/request-info"
+import { parseWithZod } from "@conform-to/zod"
+import { themeFormSchema } from "./routes/action.set-theme"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -32,29 +36,30 @@ export const meta: MetaFunction = () => [
 ]
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { getTheme } = await themeSessionResolver(request)
-
   return json({
     honeypotInputProps: honeypot.getInputProps(),
-    theme: getTheme(),
+    requestInfo: {
+      origin: getDomainUrl(request),
+      path: new URL(request.url).pathname,
+      userPrefs: {
+        theme: getTheme(request),
+      },
+    },
   })
 }
 
 export default function AppWithProviders() {
-  const { honeypotInputProps, theme } = useLoaderData<typeof loader>()
+  const { honeypotInputProps } = useLoaderData<typeof loader>()
 
   return (
-    <ThemeProvider specifiedTheme={theme} themeAction="/action/set-theme">
-      <HoneypotProvider {...honeypotInputProps}>
-        <App />
-      </HoneypotProvider>
-    </ThemeProvider>
+    <HoneypotProvider {...honeypotInputProps}>
+      <App />
+    </HoneypotProvider>
   )
 }
 
 function Document({ children }: { children: ReactNode }) {
-  const data = useLoaderData<typeof loader>()
-  const [theme] = useTheme()
+  const theme = useTheme()
 
   return (
     <html lang="en" className={clsx(theme)}>
@@ -62,7 +67,6 @@ function Document({ children }: { children: ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
       <body>
@@ -84,18 +88,34 @@ export function App() {
 
 export function ErrorBoundary() {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <GeneralErrorBoundary />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    <Document>
+      <GeneralErrorBoundary />
+    </Document>
   )
+}
+
+export function useTheme() {
+  const requestInfo = useRequestInfo()
+  const optimisticMode = useOptimisticThemeMode()
+  if (optimisticMode) {
+    return optimisticMode ?? "light"
+  }
+  return requestInfo.userPrefs.theme ?? "light"
+}
+
+export function useOptimisticThemeMode() {
+  const fetchers = useFetchers()
+  const themeFetcher = fetchers.find(
+    (f) => f.formAction === "/action/set-theme"
+  )
+
+  if (themeFetcher && themeFetcher.formData) {
+    const submission = parseWithZod(themeFetcher.formData, {
+      schema: themeFormSchema,
+    })
+
+    if (submission.status === "success") {
+      return submission.value.theme
+    }
+  }
 }
