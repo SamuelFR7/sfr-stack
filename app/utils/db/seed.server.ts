@@ -6,7 +6,9 @@ import chalk from "chalk"
 /**
  * Reset database
  */
+// eslint-disable-next-line drizzle/enforce-delete-with-where
 await db.delete(sessions)
+// eslint-disable-next-line drizzle/enforce-delete-with-where
 await db.delete(users)
 
 console.log(chalk.yellow("✔ Database reseted"))

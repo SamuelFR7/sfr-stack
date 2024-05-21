@@ -56,7 +56,7 @@ module.exports = {
     // Typescript
     {
       files: ["**/*.{ts,tsx}"],
-      plugins: ["@typescript-eslint", "import"],
+      plugins: ["@typescript-eslint", "import", "drizzle"],
       parser: "@typescript-eslint/parser",
       settings: {
         "import/internal-regex": "^~/",
@@ -74,6 +74,10 @@ module.exports = {
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
+      rules: {
+        "drizzle/enforce-delete-with-where": "error",
+        "drizzle/enforce-update-with-where": "error",
+      },
     },
 
     // Node
