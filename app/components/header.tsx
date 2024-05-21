@@ -1,5 +1,5 @@
 import { Form, Link } from "@remix-run/react"
-import { LogOut, Menu, Notebook } from "lucide-react"
+import { Home, LogOut, Menu, Notebook } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
 import { ThemeSwitch } from "./theme-switch"
@@ -18,7 +18,7 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
           to="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base"
         >
-          <Notebook className="h-6 w-6" />
+          <Home className="h-6 w-6" />
         </Link>
         <ActiveLink to="/">Home</ActiveLink>
         {isAdmin && <ActiveLink to="/admin">Admin</ActiveLink>}
