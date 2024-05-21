@@ -1,11 +1,11 @@
-import { Link, NavLink } from "@remix-run/react"
+import { Link } from "@remix-run/react"
 import { Menu, Notebook } from "lucide-react"
-import { cn } from "~/utils/utils"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
 import { LogoutButton } from "./logout-button"
 import { ThemeSwitch } from "./theme-switch"
 import { useTheme } from "~/root"
+import { ActiveLink } from "./active-link"
 
 export function Header({ isAdmin }: { isAdmin: boolean }) {
   const theme = useTheme()
@@ -19,30 +19,8 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
         >
           <Notebook className="h-6 w-6" />
         </Link>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            cn(
-              "text-muted-foreground transition-colors hover:text-foreground",
-              isActive && "text-primary"
-            )
-          }
-        >
-          Home
-        </NavLink>
-        {isAdmin && (
-          <NavLink
-            to="/admin"
-            className={({ isActive }) =>
-              cn(
-                "text-muted-foreground transition-colors hover:text-foreground",
-                isActive && "text-primary"
-              )
-            }
-          >
-            Admin
-          </NavLink>
-        )}
+        <ActiveLink to="/">Home</ActiveLink>
+        {isAdmin && <ActiveLink to="/admin">Admin</ActiveLink>}
       </nav>
       <Sheet>
         <SheetTrigger asChild>
@@ -58,30 +36,8 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
             >
               <Notebook className="h-6 w-6" />
             </Link>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                cn(
-                  "text-muted-foreground hover:text-foreground",
-                  isActive && "text-primary"
-                )
-              }
-            >
-              Home
-            </NavLink>
-            {isAdmin && (
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  cn(
-                    "text-muted-foreground hover:text-foreground",
-                    isActive && "text-primary"
-                  )
-                }
-              >
-                Admin
-              </NavLink>
-            )}
+            <ActiveLink to="/">Home</ActiveLink>
+            {isAdmin && <ActiveLink to="/admin">Admin</ActiveLink>}
           </nav>
         </SheetContent>
       </Sheet>
