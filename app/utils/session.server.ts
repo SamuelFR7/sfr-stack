@@ -2,7 +2,7 @@ import { createCookieSessionStorage, redirect } from "@remix-run/node"
 import { safeRedirect } from "remix-utils/safe-redirect"
 
 import { env } from "./env"
-import { combineResponseInits } from "./utils"
+import { combineResponseInits } from "./misc"
 import { Session } from "./db/schema"
 
 const secret = env.COOKIE_SECRET

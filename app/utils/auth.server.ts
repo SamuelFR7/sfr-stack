@@ -4,7 +4,7 @@ import { authSessionStorage } from "./session.server"
 import { sessions } from "./db/schema"
 import { eq } from "drizzle-orm"
 import { safeRedirect } from "remix-utils/safe-redirect"
-import { combineHeaders } from "./utils"
+import { combineHeaders } from "./misc"
 import { hash, verify } from "@node-rs/argon2"
 
 export const SESSION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30
