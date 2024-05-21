@@ -1,21 +1,15 @@
-import { createThemeSessionResolver } from "remix-themes"
-import { env } from "./env"
-import { createCookieSessionStorage } from "@remix-run/node"
+import * as cookie from "cookie"
 
-const isProduction = env.NODE_ENV === "production"
+const cookieName = "en_theme"
+export type Theme = "light" | "dark"
 
-const sessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: "theme",
-    path: "/",
-    httpOnly: true,
-    sameSite: "lax",
-    secrets: ["s3cr3t"],
-    // Set domain and secure only if in production
-    ...(isProduction
-      ? { domain: "your-production-domain.com", secure: true }
-      : {}),
-  },
-})
+export function getTheme(request: Request): Theme | null {
+  const cookieHeader = request.headers.get("cookie")
+  const parsed = cookieHeader ? cookie.parse(cookieHeader)[cookieName] : "light"
+  if (parsed === "light" || parsed === "dark") return parsed
+  return null
+}
 
-export const themeSessionResolver = createThemeSessionResolver(sessionStorage)
+export function setTheme(theme: Theme) {
+  return cookie.serialize(cookieName, theme, { path: "/", maxAge: 31536000 })
+}
