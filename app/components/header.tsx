@@ -1,14 +1,15 @@
-import { Link } from "@remix-run/react"
-import { Menu, Notebook } from "lucide-react"
+import { Form, Link } from "@remix-run/react"
+import { LogOut, Menu, Notebook } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { Button } from "./ui/button"
-import { LogoutButton } from "./logout-button"
 import { ThemeSwitch } from "./theme-switch"
 import { useTheme } from "~/root"
 import { ActiveLink } from "./active-link"
+import { useIsPending } from "~/utils/misc"
 
 export function Header({ isAdmin }: { isAdmin: boolean }) {
   const theme = useTheme()
+  const isPending = useIsPending()
 
   return (
     <header className="top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -43,7 +44,16 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
       </Sheet>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <ThemeSwitch userPreference={theme} />
-        <LogoutButton />
+        <Form action="/auth/logout" method="post">
+          <Button
+            size="icon"
+            variant="outline"
+            disabled={isPending}
+            type="submit"
+          >
+            <LogOut />
+          </Button>
+        </Form>
       </div>
     </header>
   )
