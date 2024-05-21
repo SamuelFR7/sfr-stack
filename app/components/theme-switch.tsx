@@ -1,8 +1,7 @@
 import { getFormProps, useForm } from "@conform-to/react"
 import { useFetcher } from "@remix-run/react"
 import { Moon, Sun } from "lucide-react"
-import { useOptimisticThemeMode } from "~/root"
-import { action } from "~/routes/action.set-theme"
+import { useOptimisticThemeMode, action } from "~/root"
 import { Theme } from "~/utils/theme.server"
 import { Button } from "./ui/button"
 
@@ -37,7 +36,7 @@ export function ThemeSwitch({
   return (
     <fetcher.Form
       method="post"
-      action="/action/set-theme"
+      action="/?_data=root"
       {...getFormProps(form)}
       className="ml-auto"
     >

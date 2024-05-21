@@ -9,6 +9,7 @@ import {
   useLoaderData,
 } from "@remix-run/react"
 import type {
+  ActionFunctionArgs,
   LinksFunction,
   LoaderFunctionArgs,
   MetaFunction,
@@ -16,14 +17,15 @@ import type {
 import stylesheet from "./tailwind.css?url"
 import { honeypot } from "./utils/honeypot.server"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
-import { Theme, getTheme } from "./utils/theme.server"
+import { Theme, getTheme, setTheme } from "./utils/theme.server"
 import clsx from "clsx"
 import { ReactNode } from "react"
 import { GeneralErrorBoundary } from "./components/error-boundary"
 import { getDomainUrl } from "./utils/misc"
 import { useRequestInfo } from "./utils/request-info"
 import { parseWithZod } from "@conform-to/zod"
-import { themeFormSchema } from "./routes/action.set-theme"
+import { invariantResponse } from "@epic-web/invariant"
+import { z } from "zod"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -46,6 +48,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   })
+}
+
+const themeFormSchema = z.object({
+  theme: z.enum(["light", "dark"]),
+})
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData()
+  const submission = parseWithZod(formData, {
+    schema: themeFormSchema,
+  })
+
+  invariantResponse(submission.status === "success", "Invalid theme received")
+
+  const { theme } = submission.value
+
+  const responseInit = {
+    headers: { "Set-Cookie": setTheme(theme) },
+  }
+
+  return json(
+    {
+      result: submission.reply(),
+    },
+    responseInit
+  )
 }
 
 export default function AppWithProviders() {
