@@ -1,10 +1,10 @@
-import { Form } from "@remix-run/react";
-import { Button } from "./ui/button";
-import { useIsPending } from "~/utils/misc";
-import { LogOut } from "lucide-react";
+import { Form } from "@remix-run/react"
+import { Button } from "./ui/button"
+import { useIsPending } from "~/utils/misc"
+import { LogOut } from "lucide-react"
 
 export function LogoutButton() {
-  const isPending = useIsPending();
+  const isPending = useIsPending()
 
   return (
     <Form action="/logout" method="post">
@@ -12,5 +12,5 @@ export function LogoutButton() {
         <LogOut />
       </Button>
     </Form>
-  );
+  )
 }

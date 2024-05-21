@@ -1,52 +1,52 @@
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { login, requireAnonymous } from "~/utils/auth.server";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node"
+import { login, requireAnonymous } from "~/utils/auth.server"
 
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Form, useActionData, useSearchParams } from "@remix-run/react";
-import { getFormProps, getInputProps, useForm } from "@conform-to/react";
-import { HoneypotInputs } from "remix-utils/honeypot/react";
-import { FormItem } from "~/components/form-item";
-import { FormMessage } from "~/components/form-message";
-import { useIsPending } from "~/utils/misc";
-import { Loader2 } from "lucide-react";
-import { parseWithZod } from "@conform-to/zod";
-import { z } from "zod";
-import { checkHoneypot } from "~/utils/honeypot.server";
-import { handleNewSession } from "~/utils/session.server";
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
+import { Form, useActionData, useSearchParams } from "@remix-run/react"
+import { getFormProps, getInputProps, useForm } from "@conform-to/react"
+import { HoneypotInputs } from "remix-utils/honeypot/react"
+import { FormItem } from "~/components/form-item"
+import { FormMessage } from "~/components/form-message"
+import { useIsPending } from "~/utils/misc"
+import { Loader2 } from "lucide-react"
+import { parseWithZod } from "@conform-to/zod"
+import { z } from "zod"
+import { checkHoneypot } from "~/utils/honeypot.server"
+import { handleNewSession } from "~/utils/session.server"
 
 const schema = z.object({
   email: z.string().email().toLowerCase(),
   password: z.string().min(1),
   redirectTo: z.string().optional(),
-});
+})
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await requireAnonymous(request);
-  return null;
+  await requireAnonymous(request)
+  return null
 }
 
 export default function SignInPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams()
 
-  const redirectTo = searchParams.get("redirectTo");
+  const redirectTo = searchParams.get("redirectTo")
 
-  const lastResult = useActionData<typeof action>();
+  const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     id: "sign-in-form",
     lastResult,
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema });
+      return parseWithZod(formData, { schema })
     },
     defaultValue: {
       redirectTo,
     },
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
-  });
+  })
 
-  const isPending = useIsPending();
+  const isPending = useIsPending()
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 ">
@@ -83,47 +83,47 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 export async function action({ request }: ActionFunctionArgs) {
-  await requireAnonymous(request);
+  await requireAnonymous(request)
 
-  const formData = await request.formData();
-  checkHoneypot(formData);
+  const formData = await request.formData()
+  checkHoneypot(formData)
 
   const submission = await parseWithZod(formData, {
     schema: (intent) =>
       schema.transform(async (data, ctx) => {
-        if (intent !== null) return { ...data, session: null };
+        if (intent !== null) return { ...data, session: null }
 
-        const session = await login(data);
+        const session = await login(data)
 
         if (!session) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Email or password are incorrects",
             path: ["email"],
-          });
-          return z.NEVER;
+          })
+          return z.NEVER
         }
 
         return {
           ...data,
           session,
-        };
+        }
       }),
     async: true,
-  });
+  })
 
   if (submission.status !== "success" || !submission.value.session) {
-    return submission.reply({ hideFields: ["password"] });
+    return submission.reply({ hideFields: ["password"] })
   }
 
-  const { session, redirectTo } = submission.value;
+  const { session, redirectTo } = submission.value
 
   return handleNewSession({
     session,
     redirectTo,
     request,
-  });
+  })
 }

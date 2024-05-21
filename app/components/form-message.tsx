@@ -1,5 +1,5 @@
 interface FormMessageProps {
-  errors: string[] | undefined;
+  errors: string[] | undefined
 }
 
 export function FormMessage({ errors }: FormMessageProps) {
@@ -7,5 +7,5 @@ export function FormMessage({ errors }: FormMessageProps) {
     <p className="text-sm font-medium text-destructive">{errors[0]}</p>
   ) : (
     <></>
-  );
+  )
 }

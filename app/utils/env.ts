@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { z } from "zod";
+import "dotenv/config"
+import { z } from "zod"
 
 const envSchema = z.object({
   NODE_ENV: z
@@ -8,6 +8,6 @@ const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   COOKIE_SECRET: z.string(),
   HONEYPOT_SECRET: z.string(),
-});
+})
 
-export const env = envSchema.parse(process.env);
+export const env = envSchema.parse(process.env)

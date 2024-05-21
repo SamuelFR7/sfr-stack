@@ -1,13 +1,13 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { safeRedirect } from "remix-utils/safe-redirect";
+import { createCookieSessionStorage, redirect } from "@remix-run/node"
+import { safeRedirect } from "remix-utils/safe-redirect"
 
-import { env } from "./env";
-import { combineResponseInits } from "./utils";
-import { Session } from "./db/schema";
+import { env } from "./env"
+import { combineResponseInits } from "./utils"
+import { Session } from "./db/schema"
 
-const secret = env.COOKIE_SECRET;
+const secret = env.COOKIE_SECRET
 
-const isProduction = env.NODE_ENV === "production";
+const isProduction = env.NODE_ENV === "production"
 
 export const authSessionStorage = createCookieSessionStorage({
   cookie: {
@@ -20,7 +20,7 @@ export const authSessionStorage = createCookieSessionStorage({
       ? { domain: "your-production-domain.com", secure: true }
       : {}),
   },
-});
+})
 
 export async function handleNewSession(
   {
@@ -28,17 +28,17 @@ export async function handleNewSession(
     session,
     redirectTo = "/",
   }: {
-    request: Request;
-    session: Session;
-    redirectTo?: string;
+    request: Request
+    session: Session
+    redirectTo?: string
   },
   responseInit?: ResponseInit
 ) {
   const authSession = await authSessionStorage.getSession(
     request.headers.get("cookie")
-  );
+  )
 
-  authSession.set("sessionId", session.id);
+  authSession.set("sessionId", session.id)
 
   return redirect(
     safeRedirect(redirectTo),
@@ -52,5 +52,5 @@ export async function handleNewSession(
       },
       responseInit
     )
-  );
+  )
 }

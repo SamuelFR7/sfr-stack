@@ -1,10 +1,10 @@
-import { Link, NavLink } from "@remix-run/react";
-import { Menu, Notebook } from "lucide-react";
-import { cn } from "~/utils/utils";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Button } from "./ui/button";
-import { LogoutButton } from "./logout-button";
-import { ModeToggle } from "./mode-toggle";
+import { Link, NavLink } from "@remix-run/react"
+import { Menu, Notebook } from "lucide-react"
+import { cn } from "~/utils/utils"
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
+import { Button } from "./ui/button"
+import { LogoutButton } from "./logout-button"
+import { ModeToggle } from "./mode-toggle"
 
 export function Header({ isAdmin }: { isAdmin: boolean }) {
   return (
@@ -21,7 +21,7 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
           className={({ isActive }) =>
             cn(
               "text-muted-foreground transition-colors hover:text-foreground",
-              isActive && "text-primary",
+              isActive && "text-primary"
             )
           }
         >
@@ -33,7 +33,7 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
             className={({ isActive }) =>
               cn(
                 "text-muted-foreground transition-colors hover:text-foreground",
-                isActive && "text-primary",
+                isActive && "text-primary"
               )
             }
           >
@@ -60,7 +60,7 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
               className={({ isActive }) =>
                 cn(
                   "text-muted-foreground hover:text-foreground",
-                  isActive && "text-primary",
+                  isActive && "text-primary"
                 )
               }
             >
@@ -72,7 +72,7 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
                 className={({ isActive }) =>
                   cn(
                     "text-muted-foreground hover:text-foreground",
-                    isActive && "text-primary",
+                    isActive && "text-primary"
                   )
                 }
               >
@@ -87,5 +87,5 @@ export function Header({ isAdmin }: { isAdmin: boolean }) {
         <LogoutButton />
       </div>
     </header>
-  );
+  )
 }

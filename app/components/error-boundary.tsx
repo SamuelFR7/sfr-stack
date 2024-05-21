@@ -1,8 +1,8 @@
-import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react";
-import { buttonVariants } from "./ui/button";
+import { Link, isRouteErrorResponse, useRouteError } from "@remix-run/react"
+import { buttonVariants } from "./ui/button"
 
 export function GeneralErrorBoundary() {
-  const error = useRouteError();
+  const error = useRouteError()
 
   return (
     <div className="min flex min-h-screen w-full flex-col items-center justify-center space-y-2 bg-destructive/40">
@@ -22,5 +22,5 @@ export function GeneralErrorBoundary() {
         Back to home
       </Link>
     </div>
-  );
+  )
 }
