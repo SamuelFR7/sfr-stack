@@ -16,7 +16,7 @@ import type {
 import stylesheet from "./tailwind.css?url"
 import { honeypot } from "./utils/honeypot.server"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
-import { getTheme } from "./utils/theme.server"
+import { Theme, getTheme } from "./utils/theme.server"
 import clsx from "clsx"
 import { ReactNode } from "react"
 import { GeneralErrorBoundary } from "./components/error-boundary"
@@ -58,9 +58,7 @@ export default function AppWithProviders() {
   )
 }
 
-function Document({ children }: { children: ReactNode }) {
-  const theme = useTheme()
-
+function Document({ children, theme }: { children: ReactNode; theme?: Theme }) {
   return (
     <html lang="en" className={clsx(theme)}>
       <head>
@@ -79,8 +77,10 @@ function Document({ children }: { children: ReactNode }) {
 }
 
 export function App() {
+  const theme = useTheme()
+
   return (
-    <Document>
+    <Document theme={theme}>
       <Outlet />
     </Document>
   )

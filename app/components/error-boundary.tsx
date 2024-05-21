@@ -8,9 +8,9 @@ export function GeneralErrorBoundary() {
     <div className="min flex min-h-screen w-full flex-col items-center justify-center space-y-2 bg-destructive/40">
       <h1 className="text-lg text-destructive">
         {isRouteErrorResponse(error) ? (
-          <p className="text-destructive-foreground">{error.data}</p>
+          <p>{error.data}</p>
         ) : (
-          <p className="text-destructive-foreground">Something went wrong</p>
+          <p>Something went wrong</p>
         )}
       </h1>
       <Link
